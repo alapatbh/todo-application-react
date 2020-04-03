@@ -6,16 +6,49 @@ class TodoList extends Component{
 
     state={
         contentList: [
-            'Read React','Practice React'
+            'Read React','Practice React','Work on java'
         ]
     };
 
+    deleteTodoItemHandler = (itemIndex) => {
+        const contentListDup = this.state.contentList.slice();
+        contentListDup.splice(itemIndex,1);
+        this.setState({
+            contentList:contentListDup
+        });
+    }
+     
+    componentWillReceiveProps(nextProps) {
+        let contentListDup= this.state.contentList.slice();
+            contentListDup=[...contentListDup,nextProps.addItem];
+            console.log(contentListDup);
+            this.setState({     contentList: contentListDup});  
+            
+    }
+
+    addItemToState = () =>{
+        if(this.props.addItem!==''){
+            let contentListDup= this.state.contentList.slice();
+            contentListDup=[...contentListDup,this.props.addItem];
+            console.log(contentListDup);
+            this.setState({
+                contentList:contentListDup
+            });
+        }
+    }
+
     render(){
+        
         let body= (
             <div >
                 {this.state.contentList.map(
                 (eachItem,index ) => { 
-                    return <li className="listCss"><TodoItem key={index} todoItemContent={eachItem} /></li>    
+                    return (
+                            <TodoItem key={index} 
+                            todoItemContent={eachItem} 
+                            deleteEachItem={() => this.deleteTodoItemHandler(index)} 
+                            />
+                            )    
                     }
                 )}
             </div>);
